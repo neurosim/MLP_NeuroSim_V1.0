@@ -15,7 +15,7 @@ If you have logistic questions or comments on the model, please contact [Prof. S
 4. Manual: `Documents/Manual.pdf`
 5. MLP Simulator (+NeuroSim): the rest of the files
 
-## Installation steps
+## Installation steps (Linux)
 1. Get the tool from GitHub
 ```
 git clone https://github.com/paiyuchen/MLP_NeuroSim.git
