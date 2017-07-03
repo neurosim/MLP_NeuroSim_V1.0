@@ -8,7 +8,7 @@ S. Yu, P.-Y. Chen, Y. Cao, L. Xia, Y. Wang, H. Wu, ※Scaling-up resistive synap
 
 If you have logistic questions or comments on the model, please contact [Prof. Shimeng Yu](mailto:shimengy@asu.edu), and if you have technical questions or comments, please contact [Pai-Yu Chen](mailto:pchen72@asu.edu) and [Xiaochen Peng](mailto:xpeng15@asu.edu).
 
-## File lists:
+## File lists
 1. MATLAB fitting script: `nonlinear_fit.m`
 2. Nonlinearity-to-A table: `Documents/Nonlinearity-NormA.htm`
 3. MNIST data: `MNIST_data.zip`
@@ -33,7 +33,7 @@ make
 
 For the usage of this tool, please refer to the manual.
 
-## References related to this tool: 
+## References related to this tool 
 1. P.-Y. Chen, X. Peng, S. Yu, ※System-level benchmark of synaptic device characteristics for neuro-inspired computing,§ IEEE SOI-3D-Subthreshold Microelectronics Technology Unified Conference (S3S) 2017, San Francisco, USA.
 2. P.-Y. Chen, S. Yu, ※Partition SRAM and RRAM based synaptic arrays for neuro-inspired computing,*§ IEEE International Symposium on Circuits and Systems (ISCAS)*, 2016, Montreal, Canada.
 3. P.-Y. Chen, B. Lin, I.-T. Wang, T.-H. Hou, J. Ye, S. Vrudhula, J.-S. Seo, Y. Cao, and S. Yu, ※Mitigating effects of non-ideal synaptic device characteristics for on-chip learning,*§ IEEE/ACM International Conference on Computer-Aided Design (ICCAD)*, 2015, Austin, TX, USA.
