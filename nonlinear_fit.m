@@ -1,3 +1,5 @@
+% This script is for fitting the experimental weight update data and extract the device parameters
+
 clc;
 clear;
 close all;
