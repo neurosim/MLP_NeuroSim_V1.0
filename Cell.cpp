@@ -106,13 +106,11 @@ IdealDevice::IdealDevice(int x, int y) {
 	writePulseWidthLTP = 10e-9;	// Write pulse width (s) for LTP or weight increase
 	writePulseWidthLTD = 10e-9;	// Write pulse width (s) for LTD or weight decrease
 	writeEnergy = 0;	// Dynamic variable for calculation of write energy (J)
-	numBitLTP = 6;	// Number of bits in the conductance states during LTP or weight increase
-	numBitLTD = 6;	// Number of bits in the conductance states during LTD or weight decrease
-	maxNumLevelLTP = pow(2, numBitLTP) - 1;	// Maximum number of conductance states during LTP or weight increase
-	maxNumLevelLTD = pow(2, numBitLTD) - 1;	// Maximum number of conductance states during LTD or weight decrease
+	maxNumLevelLTP = 63;	// Maximum number of conductance states during LTP or weight increase
+	maxNumLevelLTD = 63;	// Maximum number of conductance states during LTD or weight decrease
 	numPulse = 0;	// Number of write pulses used in the most recent write operation (dynamic variable)
 	cmosAccess = true;	// True: Pseudo-crossbar (1T1R), false: cross-point
-	resistanceAccess = 10e3;	// The resistance of transistor (Ohm) in Pseudo-crossbar array when turned ON
+	resistanceAccess = 15e3;	// The resistance of transistor (Ohm) in Pseudo-crossbar array when turned ON
 	nonlinearIV = false;	// Consider I-V nonlinearity or not (Currently for cross-point array only)
 	NL = 10;	// Nonlinearity in write scheme (the current ratio between Vw and Vw/2), assuming for the LTP side
 	if (nonlinearIV) {	// Currently for cross-point array only
@@ -148,7 +146,7 @@ void IdealDevice::Write(double deltaWeightNormalized, bool writeEnergyReport, do
 		numPulse = deltaWeightNormalized * maxNumLevelLTD;	// will be a negative number
 	}
 	double conductanceNew = conductance + deltaWeightNormalized * (maxConductance - minConductance);
-	if ( conductanceNew > maxConductance) {
+	if (conductanceNew > maxConductance) {
 		conductanceNew = maxConductance;
 	} else if (conductanceNew < minConductance) {
 		conductanceNew = minConductance;
@@ -158,6 +156,8 @@ void IdealDevice::Write(double deltaWeightNormalized, bool writeEnergyReport, do
 	if (writeEnergyReport) {
 		WriteEnergyCalculation(conductance, conductanceNew, wireCapCol);
 	}
+
+	conductance = conductanceNew;
 }
 
 /* Real Device */
@@ -173,13 +173,11 @@ RealDevice::RealDevice(int x, int y) {
 	writePulseWidthLTP = 300e-6;	// Write pulse width (s) for LTP or weight increase
 	writePulseWidthLTD = 300e-6;	// Write pulse width (s) for LTD or weight decrease
 	writeEnergy = 0;	// Dynamic variable for calculation of write energy (J)
-	numBitLTP = 6;	// Number of bits in the conductance states during LTP or weight increase
-	numBitLTD = 6;	// Number of bits in the conductance states during LTD or weight decrease
-	maxNumLevelLTP = pow(2, numBitLTP) - 1;	// Maximum number of conductance states during LTP or weight increase
-	maxNumLevelLTD = pow(2, numBitLTD) - 1;	// Maximum number of conductance states during LTD or weight decrease
+	maxNumLevelLTP = 97;	// Maximum number of conductance states during LTP or weight increase
+	maxNumLevelLTD = 100;	// Maximum number of conductance states during LTD or weight decrease
 	numPulse = 0;	// Number of write pulses used in the most recent write operation (dynamic variable)
 	cmosAccess = true;	// True: Pseudo-crossbar (1T1R), false: cross-point
-	resistanceAccess = 10e3;	// The resistance of transistor (Ohm) in Pseudo-crossbar array when turned ON
+	resistanceAccess = 15e3;	// The resistance of transistor (Ohm) in Pseudo-crossbar array when turned ON
 	nonlinearIV = false;	// Consider I-V nonlinearity or not (Currently for cross-point array only)
 	NL = 10;    // I-V nonlinearity in write scheme (the current ratio between Vw and Vw/2), assuming for the LTP side
 	if (nonlinearIV) {  // Currently for cross-point array only
@@ -197,12 +195,12 @@ RealDevice::RealDevice(int x, int y) {
 	localGen.seed(std::time(0));
 	
 	/* Device-to-device weight update variation */
-	NL_LTP = 1.13; // LTP nonlinearity
-	NL_LTD = 2.65; // LTD nonlinearity
+	NL_LTP = 2.4; // LTP nonlinearity
+	NL_LTD = -4.88; // LTD nonlinearity
 	sigmaDtoD = 0;	// Sigma of device-to-device weight update vairation in gaussian distribution
 	gaussian_dist2 = new std::normal_distribution<double>(0, sigmaDtoD);	// Set up mean and stddev for device-to-device weight update vairation
-	paramALTP = getParamA(NL_LTP + (*gaussian_dist2)(localGen));	// Parameter A for LTP nonlinearity
-	paramALTD = getParamA(NL_LTD + (*gaussian_dist2)(localGen));	// Parameter A for LTD nonlinearity
+	paramALTP = getParamA(NL_LTP + (*gaussian_dist2)(localGen)) * maxNumLevelLTP;	// Parameter A for LTP nonlinearity
+	paramALTD = getParamA(NL_LTD + (*gaussian_dist2)(localGen)) * maxNumLevelLTD;	// Parameter A for LTD nonlinearity
 
 	/* Cycle-to-cycle weight update variation */
 	sigmaCtoC = 0.035 * (maxConductance - minConductance);	// Sigma of cycle-to-cycle weight update vairation: defined as the percentage of conductance range
@@ -237,8 +235,8 @@ void RealDevice::Write(double deltaWeightNormalized, bool writeEnergyReport, dou
 		numPulse = deltaWeightNormalized * maxNumLevelLTP;
 		if (nonlinearWrite) {
 			paramBLTP = (maxConductance - minConductance) / (1 - exp(-maxNumLevelLTP/paramALTP));
-			xPulse = InvLTP(conductance, maxNumLevelLTP, paramALTP, paramBLTP, minConductance);
-			conductanceNew = LTP(xPulse+numPulse, maxNumLevelLTP, paramALTP, paramBLTP, minConductance);
+			xPulse = InvNonlinearWeight(conductance, maxNumLevelLTP, paramALTP, paramBLTP, minConductance);
+			conductanceNew = NonlinearWeight(xPulse+numPulse, maxNumLevelLTP, paramALTP, paramBLTP, minConductance);
 		} else {
 			xPulse = (conductance - minConductance) / (maxConductance - minConductance) * maxNumLevelLTP;
 			conductanceNew = (xPulse+numPulse) / maxNumLevelLTP * (maxConductance - minConductance) + minConductance;
@@ -248,8 +246,8 @@ void RealDevice::Write(double deltaWeightNormalized, bool writeEnergyReport, dou
 		numPulse = deltaWeightNormalized * maxNumLevelLTD;	// will be a negative number
 		if (nonlinearWrite) {
 			paramBLTD = (maxConductance - minConductance) / (1 - exp(-maxNumLevelLTD/paramALTD));
-			xPulse = InvLTD(conductance, maxNumLevelLTD, paramALTD, paramBLTD, maxConductance);
-			conductanceNew = LTD(xPulse+numPulse, maxNumLevelLTD, paramALTD, paramBLTD, maxConductance);
+			xPulse = InvNonlinearWeight(conductance, maxNumLevelLTD, paramALTD, paramBLTD, minConductance);
+			conductanceNew = NonlinearWeight(xPulse+numPulse, maxNumLevelLTD, paramALTD, paramBLTD, minConductance);
 		} else {
 			xPulse = (conductance - minConductance) / (maxConductance - minConductance) * maxNumLevelLTD;
 			conductanceNew = (xPulse+numPulse) / maxNumLevelLTD * (maxConductance - minConductance) + minConductance;

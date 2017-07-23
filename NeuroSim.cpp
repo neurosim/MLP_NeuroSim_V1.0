@@ -95,12 +95,9 @@ void NeuroSimSubArrayInitialize(SubArray *& subArray, Array *array, InputParamet
 		if (subArray->digitalModeNeuro) {
 			// XXX: To be released
 		} else {
-			int numBitLTP = static_cast<AnalogNVM*>(array->cell[0][0])->numBitLTP;
-			int numBitLTD = static_cast<AnalogNVM*>(array->cell[0][0])->numBitLTD;
 			int maxNumLevelLTP = static_cast<AnalogNVM*>(array->cell[0][0])->maxNumLevelLTP;
 			int maxNumLevelLTD = static_cast<AnalogNVM*>(array->cell[0][0])->maxNumLevelLTD;
 			subArray->maxNumWritePulse = (maxNumLevelLTP > maxNumLevelLTD)? maxNumLevelLTP : maxNumLevelLTD;
-			subArray->avgWeightBit = (numBitLTP > numBitLTD)? numBitLTP : numBitLTD;    // Average weight for each synapse (value can range from 0 to numBitLTP or numBitLTD)
 		}
 		
 		cell.accessType = (static_cast<eNVM*>(array->cell[0][0])->cmosAccess)? CMOS_access : none_access;	// CMOS_access: 1T1R (pseudo-crossbar), none_access: crossbar
@@ -108,6 +105,7 @@ void NeuroSimSubArrayInitialize(SubArray *& subArray, Array *array, InputParamet
 		cell.resistanceOn = 1/static_cast<eNVM*>(array->cell[0][0])->maxConductance;	// Ron resistance at Vr in the reported measurement data (need to recalculate below if considering the nonlinearity)
 		cell.resistanceOff = 1/static_cast<eNVM*>(array->cell[0][0])->minConductance;	// Roff resistance at Vr in the reported measurement dat (need to recalculate below if considering the nonlinearity)
 		cell.resistanceAvg = (cell.resistanceOn + cell.resistanceOff)/2;	// Average resistance (used for energy estimation)
+		cell.resCellAccess = static_cast<eNVM*>(array->cell[0][0])->resistanceAccess;   // Access transistor resistance
 		cell.readVoltage = static_cast<eNVM*>(array->cell[0][0])->readVoltage;	// On-chip read voltage for memory cell
 		double writeVoltageLTP = static_cast<eNVM*>(array->cell[0][0])->writeVoltageLTP;
 		double writeVoltageLTD = static_cast<eNVM*>(array->cell[0][0])->writeVoltageLTD;
@@ -155,13 +153,13 @@ void NeuroSimSubArrayInitialize(SubArray *& subArray, Array *array, InputParamet
 	array->wireCapBLCol = subArray->lengthCol * 0.2e-15/1e-6;	// For BL cap of digital eNVM in 1T1R
 	
 	/* Transfer the resistance of access transistor in 1T1R from NeuroSim to MLP simulator */
-	for (int col=0; col<numCol; col++) {
-		for (int row=0; row<numRow; row++) {
-			if (eNVM *temp = dynamic_cast<eNVM*>(array->cell[col][row])) {
-				static_cast<eNVM*>(array->cell[col][row])->resistanceAccess = cell.resCellAccess;
-			}
-		}
-	}
+	//for (int col=0; col<numCol; col++) {
+	//	for (int row=0; row<numRow; row++) {
+	//		if (eNVM *temp = dynamic_cast<eNVM*>(array->cell[col][row])) {
+	//			static_cast<eNVM*>(array->cell[col][row])->resistanceAccess = cell.resCellAccess;
+	//		}
+	//	}
+	//}
 }
 
 void NeuroSimSubArrayArea(SubArray *subArray) {

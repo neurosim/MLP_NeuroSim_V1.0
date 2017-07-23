@@ -1,5 +1,3 @@
-% This script is for fitting the experimental weight update data and extract the device parameters
-
 clc;
 clear;
 close all;
@@ -194,7 +192,7 @@ plot(exp_LTD(:,1), exp_LTD(:,2), 'ro', 'LineWidth', 1);
 xf = 1;
 A_LTP = 0.5;
 B_LTP = 1./(1-exp(-1./A_LTP));
-A_LTD = 0.2;
+A_LTD = -0.2;
 B_LTD = 1./(1-exp(-1./A_LTD));
 
 % LTP fitting
@@ -223,7 +221,7 @@ x_ltd(1) = 1;
 y_ltd(1) = 1;
 for n=1:1/x_step_ltd+1
     x_ltd(n+1) = x_ltd(n)-x_step_ltd;
-    y_ltd(n+1) = -B_LTD(1)*(1-exp((x_ltd(n+1)-1)/A_LTD(1)))+1;
+    y_ltd(n+1) = B_LTD(1)*(1-exp(-x_ltd(n+1)/A_LTD(1)));
     delta_y = (y_ltd(n+1)-y_ltd(n)) + randn*var_amp;
     y_ltd(n+1) = y_ltd(n) + delta_y;
     if y_ltd(n+1)>=1
@@ -231,7 +229,7 @@ for n=1:1/x_step_ltd+1
     elseif y_ltd(n+1)<=0
         y_ltd(n+1)=0;
     end
-    x_ltd(n+1) = A_LTD(1)*log(1+(y_ltd(n+1)-1)/B_LTD(1))+1;
+    x_ltd(n+1) = -A_LTD(1)*log(1-(y_ltd(n+1))/B_LTD(1));
 end
 x_start = numel(x_ltd(:));
 x_end = numel(x_ltd(:)) - n;

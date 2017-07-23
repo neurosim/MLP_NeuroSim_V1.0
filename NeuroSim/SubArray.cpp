@@ -112,7 +112,8 @@ void SubArray::Initialize(int _numRow, int _numCol, double _unitWireRes){  //ini
 		// XXX: To be released
     } else if (cell.memCellType == Type::RRAM) {
 		if (cell.accessType == CMOS_access) {	// 1T1R
-			cell.resCellAccess = cell.resistanceOn * IR_DROP_TOLERANCE;    //calculate access CMOS resistance
+			if (!cell.resCellAccess)    // If not defined
+				cell.resCellAccess = cell.resistanceOn * IR_DROP_TOLERANCE;    //calculate access CMOS resistance
 			cell.widthAccessCMOS = CalculateOnResistance(tech.featureSize, NMOS, inputParameter.temperature, tech) / cell.resCellAccess;   //get access CMOS width
 			if (cell.widthAccessCMOS > cell.widthInFeatureSize) {	// Place transistor vertically
 				printf("Transistor width of 1T1R=%.2fF is larger than the assigned cell width=%.2fF in layout\n", cell.widthAccessCMOS, cell.widthInFeatureSize);

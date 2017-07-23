@@ -44,10 +44,8 @@
 double sigmoid(double x);
 double truncate(double x, int numBit, double threshold=0.5);
 double round_th(double x, double threshold);
-double LTP(double xPulse, int maxNumLevel, double A, double B, double minConductance);
-double LTD(double xPulse, int maxNumLevel, double A, double B, double maxConductance);
-double InvLTP(double conductance, int maxNumLevel, double A, double B, double minConductance);
-double InvLTD(double conductance, int maxNumLevel, double A, double B, double maxConductance);
+double NonlinearWeight(double xPulse, int maxNumLevel, double A, double B, double minConductance);
+double InvNonlinearWeight(double conductance, int maxNumLevel, double A, double B, double minConductance);
 double MeasuredLTP(double xPulse, int maxNumLevel, std::vector<double>& dataConductanceLTP);
 double MeasuredLTD(double xPulse, int maxNumLevel, std::vector<double>& dataConductanceLTD);
 double InvMeasuredLTP(double conductance, int maxNumLevel, std::vector<double>& dataConductanceLTP);
