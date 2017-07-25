@@ -77,18 +77,28 @@ void AnalogNVM::WriteEnergyCalculation(double conductance, double conductanceNew
 		if (numPulse > 0) { // If the cell needs LTP pulses
 			writeEnergy = writeVoltageLTP * writeVoltageLTP * (conductance+conductanceNew)/2 * writePulseWidthLTP * numPulse;
 			writeEnergy += writeVoltageLTP * writeVoltageLTP * wireCapCol * numPulse;
-			writeEnergy += writeVoltageLTD/2 * writeVoltageLTD/2 * conductanceNew * writePulseWidthLTD * maxNumLevelLTD;    // Half-selected during LTD phase (use the new conductance value if LTP phase is before LTD phase)
-			writeEnergy += writeVoltageLTD/2 * writeVoltageLTD/2 * wireCapCol;
+			if (!cmosAccess) {	// Crossbar
+				writeEnergy += writeVoltageLTD/2 * writeVoltageLTD/2 * conductanceNew * writePulseWidthLTD * maxNumLevelLTD;    // Half-selected during LTD phase (use the new conductance value if LTP phase is before LTD phase)
+				writeEnergy += writeVoltageLTD/2 * writeVoltageLTD/2 * wireCapCol;
+			}
 		} else if (numPulse < 0) {  // If the cell needs LTD pulses
-			writeEnergy = writeVoltageLTP/2 * writeVoltageLTP/2 * conductance * writePulseWidthLTP * maxNumLevelLTP;    // Half-selected during LTP phase (use the old conductance value if LTP phase is before LTD phase)
-			writeEnergy += writeVoltageLTP/2 * writeVoltageLTP/2 * wireCapCol;
+			if (!cmosAccess) {	// Crossbar
+				writeEnergy = writeVoltageLTP/2 * writeVoltageLTP/2 * conductance * writePulseWidthLTP * maxNumLevelLTP;    // Half-selected during LTP phase (use the old conductance value if LTP phase is before LTD phase)
+				writeEnergy += writeVoltageLTP/2 * writeVoltageLTP/2 * wireCapCol;
+			} else {	// 1T1R
+				writeEnergy = writeVoltageLTP * writeVoltageLTP * wireCapCol;
+			}
 			writeEnergy += writeVoltageLTD * writeVoltageLTD * wireCapCol * (-numPulse);
 			writeEnergy += writeVoltageLTD * writeVoltageLTD * (conductance+conductanceNew)/2 * writePulseWidthLTD * (-numPulse);
 		} else {    // Half-selected during both LTP and LTD phases
-			writeEnergy = writeVoltageLTP/2 * writeVoltageLTP/2 * conductance * writePulseWidthLTP * maxNumLevelLTP;
-			writeEnergy += writeVoltageLTP/2 * writeVoltageLTP/2 * wireCapCol;
-			writeEnergy += writeVoltageLTD/2 * writeVoltageLTD/2 * conductance * writePulseWidthLTD * maxNumLevelLTD;
-			writeEnergy += writeVoltageLTD/2 * writeVoltageLTD/2 * wireCapCol;
+			if (!cmosAccess) {	// Crossbar
+				writeEnergy = writeVoltageLTP/2 * writeVoltageLTP/2 * conductance * writePulseWidthLTP * maxNumLevelLTP;
+				writeEnergy += writeVoltageLTP/2 * writeVoltageLTP/2 * wireCapCol;
+				writeEnergy += writeVoltageLTD/2 * writeVoltageLTD/2 * conductance * writePulseWidthLTD * maxNumLevelLTD;
+				writeEnergy += writeVoltageLTD/2 * writeVoltageLTD/2 * wireCapCol;
+			} else {	// 1T1R
+				writeEnergy = writeVoltageLTP * writeVoltageLTP * wireCapCol;
+			}
 		}
 	}
 }
