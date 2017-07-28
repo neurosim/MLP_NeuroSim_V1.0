@@ -133,7 +133,7 @@ void SubArray::Initialize(int _numRow, int _numCol, double _unitWireRes){  //ini
 				wlDecoderOutput.Initialize(numRow, false, true);     //WL decoder follower    
 				wlDecoder.Initialize(REGULAR_ROW, (int)ceil(log2(numRow)), false);
 				
-				double resTg = cell.resMemCellOn / numRow * IR_DROP_TOLERANCE;
+				double resTg = cell.resMemCellOn * IR_DROP_TOLERANCE;
 				slSwitchMatrix.Initialize(COL_MODE, numCol, resTg, activityRowRead, activityColWrite, numWriteCellPerOperationNeuro, numWritePulse, clkFreq);     //SL use switch matrix
 				
 				resTg = cell.resMemCellOn / numCol * IR_DROP_TOLERANCE;
