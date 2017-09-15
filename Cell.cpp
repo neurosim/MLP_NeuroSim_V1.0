@@ -74,30 +74,35 @@ void AnalogNVM::WriteEnergyCalculation(double conductance, double conductanceNew
 		conductanceAtVwLTD = conductanceNewAtVwLTD;
 		conductanceAtHalfVwLTD = conductanceNewAtHalfVwLTD;
 	} else {    // If not cross-point array or not considering I-V nonlinearity
-		if (numPulse > 0) { // If the cell needs LTP pulses
-			writeEnergy = writeVoltageLTP * writeVoltageLTP * (conductance+conductanceNew)/2 * writePulseWidthLTP * numPulse;
-			writeEnergy += writeVoltageLTP * writeVoltageLTP * wireCapCol * numPulse;
-			if (!cmosAccess) {	// Crossbar
-				writeEnergy += writeVoltageLTD/2 * writeVoltageLTD/2 * conductanceNew * writePulseWidthLTD * maxNumLevelLTD;    // Half-selected during LTD phase (use the new conductance value if LTP phase is before LTD phase)
-				writeEnergy += writeVoltageLTD/2 * writeVoltageLTD/2 * wireCapCol;
-			}
-		} else if (numPulse < 0) {  // If the cell needs LTD pulses
-			if (!cmosAccess) {	// Crossbar
-				writeEnergy = writeVoltageLTP/2 * writeVoltageLTP/2 * conductance * writePulseWidthLTP * maxNumLevelLTP;    // Half-selected during LTP phase (use the old conductance value if LTP phase is before LTD phase)
-				writeEnergy += writeVoltageLTP/2 * writeVoltageLTP/2 * wireCapCol;
-			} else {	// 1T1R
-				writeEnergy = writeVoltageLTP * writeVoltageLTP * wireCapCol;
-			}
-			writeEnergy += writeVoltageLTD * writeVoltageLTD * wireCapCol * (-numPulse);
-			writeEnergy += writeVoltageLTD * writeVoltageLTD * (conductance+conductanceNew)/2 * writePulseWidthLTD * (-numPulse);
-		} else {    // Half-selected during both LTP and LTD phases
-			if (!cmosAccess) {	// Crossbar
-				writeEnergy = writeVoltageLTP/2 * writeVoltageLTP/2 * conductance * writePulseWidthLTP * maxNumLevelLTP;
-				writeEnergy += writeVoltageLTP/2 * writeVoltageLTP/2 * wireCapCol;
-				writeEnergy += writeVoltageLTD/2 * writeVoltageLTD/2 * conductance * writePulseWidthLTD * maxNumLevelLTD;
-				writeEnergy += writeVoltageLTD/2 * writeVoltageLTD/2 * wireCapCol;
-			} else {	// 1T1R
-				writeEnergy = writeVoltageLTP * writeVoltageLTP * wireCapCol;
+		if (FeFET) {    // FeFET structure
+			// XXX: To be released
+			
+		} else {
+			if (numPulse > 0) { // If the cell needs LTP pulses
+				writeEnergy = writeVoltageLTP * writeVoltageLTP * (conductance+conductanceNew)/2 * writePulseWidthLTP * numPulse;
+				writeEnergy += writeVoltageLTP * writeVoltageLTP * wireCapCol * numPulse;
+				if (!cmosAccess) {	// Crossbar
+					writeEnergy += writeVoltageLTD/2 * writeVoltageLTD/2 * conductanceNew * writePulseWidthLTD * maxNumLevelLTD;    // Half-selected during LTD phase (use the new conductance value if LTP phase is before LTD phase)
+					writeEnergy += writeVoltageLTD/2 * writeVoltageLTD/2 * wireCapCol;
+				}
+			} else if (numPulse < 0) {  // If the cell needs LTD pulses
+				if (!cmosAccess) {	// Crossbar
+					writeEnergy = writeVoltageLTP/2 * writeVoltageLTP/2 * conductance * writePulseWidthLTP * maxNumLevelLTP;    // Half-selected during LTP phase (use the old conductance value if LTP phase is before LTD phase)
+					writeEnergy += writeVoltageLTP/2 * writeVoltageLTP/2 * wireCapCol;
+				} else {	// 1T1R
+					writeEnergy = writeVoltageLTP * writeVoltageLTP * wireCapCol;
+				}
+				writeEnergy += writeVoltageLTD * writeVoltageLTD * wireCapCol * (-numPulse);
+				writeEnergy += writeVoltageLTD * writeVoltageLTD * (conductance+conductanceNew)/2 * writePulseWidthLTD * (-numPulse);
+			} else {    // Half-selected during both LTP and LTD phases
+				if (!cmosAccess) {	// Crossbar
+					writeEnergy = writeVoltageLTP/2 * writeVoltageLTP/2 * conductance * writePulseWidthLTP * maxNumLevelLTP;
+					writeEnergy += writeVoltageLTP/2 * writeVoltageLTP/2 * wireCapCol;
+					writeEnergy += writeVoltageLTD/2 * writeVoltageLTD/2 * conductance * writePulseWidthLTD * maxNumLevelLTD;
+					writeEnergy += writeVoltageLTD/2 * writeVoltageLTD/2 * wireCapCol;
+				} else {	// 1T1R
+					writeEnergy = writeVoltageLTP * writeVoltageLTP * wireCapCol;
+				}
 			}
 		}
 	}
@@ -120,6 +125,7 @@ IdealDevice::IdealDevice(int x, int y) {
 	maxNumLevelLTD = 63;	// Maximum number of conductance states during LTD or weight decrease
 	numPulse = 0;	// Number of write pulses used in the most recent write operation (dynamic variable)
 	cmosAccess = true;	// True: Pseudo-crossbar (1T1R), false: cross-point
+	FeFET = false;      // True: FeFET structure (Pseudo-crossbar only, should be cmosAccess=1)
 	resistanceAccess = 15e3;	// The resistance of transistor (Ohm) in Pseudo-crossbar array when turned ON
 	nonlinearIV = false;	// Consider I-V nonlinearity or not (Currently for cross-point array only)
 	NL = 10;	// Nonlinearity in write scheme (the current ratio between Vw and Vw/2), assuming for the LTP side
@@ -134,7 +140,7 @@ IdealDevice::IdealDevice(int x, int y) {
 	gaussian_dist = new std::normal_distribution<double>(0, sigmaReadNoise);	// Set up mean and stddev for read noise
 
 	heightInFeatureSize = cmosAccess? 4 : 2;	// Cell height = 4F (Pseudo-crossbar) or 2F (cross-point)
-	widthInFeatureSize = cmosAccess? 4 : 2;		// Cell width = 4F (Pseudo-crossbar) or 2F (cross-point)
+	widthInFeatureSize = cmosAccess? (FeFET? 6 : 4) : 2;    // Cell width = 6F (FeFET) or 4F (Pseudo-crossbar) or 2F (cross-point)
 }
 
 double IdealDevice::Read(double voltage) {
@@ -187,6 +193,7 @@ RealDevice::RealDevice(int x, int y) {
 	maxNumLevelLTD = 100;	// Maximum number of conductance states during LTD or weight decrease
 	numPulse = 0;	// Number of write pulses used in the most recent write operation (dynamic variable)
 	cmosAccess = true;	// True: Pseudo-crossbar (1T1R), false: cross-point
+	FeFET = false;      // True: FeFET structure (Pseudo-crossbar only, should be cmosAccess=1)
 	resistanceAccess = 15e3;	// The resistance of transistor (Ohm) in Pseudo-crossbar array when turned ON
 	nonlinearIV = false;	// Consider I-V nonlinearity or not (Currently for cross-point array only)
 	NL = 10;    // I-V nonlinearity in write scheme (the current ratio between Vw and Vw/2), assuming for the LTP side
@@ -217,7 +224,7 @@ RealDevice::RealDevice(int x, int y) {
 	gaussian_dist3 = new std::normal_distribution<double>(0, sigmaCtoC);    // Set up mean and stddev for cycle-to-cycle weight update vairation
 
 	heightInFeatureSize = cmosAccess? 4 : 2;	// Cell height = 4F (Pseudo-crossbar) or 2F (cross-point)
-	widthInFeatureSize = cmosAccess? 4 : 2;		// Cell width = 4F (Pseudo-crossbar) or 2F (cross-point)
+	widthInFeatureSize = cmosAccess? (FeFET? 6 : 4) : 2;    // Cell width = 6F (FeFET) or 4F (Pseudo-crossbar) or 2F (cross-point)
 }
 
 double RealDevice::Read(double voltage) {	// Return read current (A)

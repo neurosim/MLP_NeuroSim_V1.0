@@ -44,7 +44,11 @@ double Array::ReadCell(int x, int y) {
 		double readVoltage = static_cast<eNVM*>(cell[x][y])->readVoltage;
 		double totalWireResistance;
 		if (static_cast<eNVM*>(cell[x][y])->cmosAccess) {
-			totalWireResistance = (x + 1) * wireResistanceRow + (arrayRowSize - y) * wireResistanceCol + static_cast<eNVM*>(cell[x][y])->resistanceAccess;
+			if (static_cast<eNVM*>(cell[x][y])->FeFET) {    // FeFET
+				// XXX: To be released
+			} else {	// Normal
+				totalWireResistance = (x + 1) * wireResistanceRow + (arrayRowSize - y) * wireResistanceCol + static_cast<eNVM*>(cell[x][y])->resistanceAccess;
+			}
 		} else {
 			totalWireResistance = (x + 1) * wireResistanceRow + (arrayRowSize - y) * wireResistanceCol;
 		}
