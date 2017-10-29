@@ -4,7 +4,7 @@ The MLP+NeuroSim framework was developed by [Prof. Shimeng Yu's group](http://fa
 
 This is the released version 1.0 (July 1st, 2017) for the tool. If you use the tool or adapt the tool in your work or publication, you are required to cite the following reference:
 
-S. Yu, P.-Y. Chen, Y. Cao, L. Xia, Y. Wang, H. Wu, ※Scaling-up resistive synaptic arrays for neuro-inspired architecture: challenges and prospect,*§ IEEE International Electron Devices Meeting (IEDM)*, 2015, Washington DC, USA.
+P.-Y. Chen, X. Peng, S. Yu, ※NeuroSim+: An integrated device-to-algorithm framework for benchmarking synaptic devices and array architectures,*§ IEEE International Electron Devices Meeting (IEDM)*, 2017, San Francisco, USA.
 
 If you have logistic questions or comments on the model, please contact [Prof. Shimeng Yu](mailto:shimengy@asu.edu), and if you have technical questions or comments, please contact [Pai-Yu Chen](mailto:pchen72@asu.edu) and [Xiaochen Peng](mailto:xpeng15@asu.edu).
 

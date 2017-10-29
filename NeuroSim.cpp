@@ -312,8 +312,8 @@ double NeuroSimSubArrayWriteEnergy(SubArray *subArray) {	// For 1 weight update 
 			// XXX: To be released
 		} else {    // Analog eNVM
 			if (subArray->cell.accessType == CMOS_access) {   // 1T1R
+				subArray->blSwitchMatrix.numWritePulse = 1;	// Does not matter
 				subArray->slSwitchMatrix.numWritePulse = subArray->numWritePulse;
-				subArray->wlSwitchMatrix.numWritePulse = subArray->numWritePulse;
 				subArray->wlDecoder.CalculatePower(1, 1);	// Don't care read
 				subArray->wlDecoderOutput.CalculatePower(1, 1);	// Don't care read
 				subArray->blSwitchMatrix.CalculatePower(1, 1);	// Don't care read
