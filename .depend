@@ -63,15 +63,15 @@ SubArray.o: NeuroSim/SubArray.cpp NeuroSim/constant.h NeuroSim/formula.h \
  NeuroSim/ShiftAdd.h NeuroSim/Adder.h
 Technology.o: NeuroSim/Technology.cpp NeuroSim/Technology.h \
  NeuroSim/typedef.h
-Mux.o: NeuroSim/Mux.cpp NeuroSim/constant.h NeuroSim/formula.h \
- NeuroSim/Technology.h NeuroSim/typedef.h NeuroSim/Mux.h \
- NeuroSim/InputParameter.h NeuroSim/MemCell.h NeuroSim/FunctionUnit.h
 RowDecoder.o: NeuroSim/RowDecoder.cpp NeuroSim/constant.h \
  NeuroSim/formula.h NeuroSim/Technology.h NeuroSim/typedef.h \
  NeuroSim/RowDecoder.h NeuroSim/InputParameter.h NeuroSim/MemCell.h \
  NeuroSim/FunctionUnit.h
 DFF.o: NeuroSim/DFF.cpp NeuroSim/constant.h NeuroSim/formula.h \
  NeuroSim/Technology.h NeuroSim/typedef.h NeuroSim/DFF.h \
+ NeuroSim/InputParameter.h NeuroSim/MemCell.h NeuroSim/FunctionUnit.h
+Mux.o: NeuroSim/Mux.cpp NeuroSim/constant.h NeuroSim/formula.h \
+ NeuroSim/Technology.h NeuroSim/typedef.h NeuroSim/Mux.h \
  NeuroSim/InputParameter.h NeuroSim/MemCell.h NeuroSim/FunctionUnit.h
 Adder.o: NeuroSim/Adder.cpp NeuroSim/constant.h NeuroSim/typedef.h \
  NeuroSim/formula.h NeuroSim/Technology.h NeuroSim/Adder.h \

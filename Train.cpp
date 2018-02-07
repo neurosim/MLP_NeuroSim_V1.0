@@ -253,7 +253,7 @@ void Train(const int numTrain, const int epochs) {
 				double writePulseWidthLTD = static_cast<eNVM*>(arrayIH->cell[0][0])->writePulseWidthLTD;
 				int maxNumLevelLTP = static_cast<AnalogNVM*>(arrayIH->cell[0][0])->maxNumLevelLTP;
 				int maxNumLevelLTD = static_cast<AnalogNVM*>(arrayIH->cell[0][0])->maxNumLevelLTD;
-				numBatchWriteSynapse = arrayIH->arrayColSize;
+				numBatchWriteSynapse = (int)ceil((double)arrayIH->arrayColSize / param->numWriteColMuxed);
 				#pragma omp parallel for reduction(+: sumArrayWriteEnergy, sumNeuroSimWriteEnergy)
 				for (int k = 0; k < param->nInput; k++) {
 					for (int j = 0; j < param->nHide; j+=numBatchWriteSynapse) {
@@ -360,7 +360,7 @@ void Train(const int numTrain, const int epochs) {
 				double writePulseWidthLTD = static_cast<eNVM*>(arrayHO->cell[0][0])->writePulseWidthLTD;
 				int maxNumLevelLTP = static_cast<AnalogNVM*>(arrayHO->cell[0][0])->maxNumLevelLTP;
 				int maxNumLevelLTD = static_cast<AnalogNVM*>(arrayHO->cell[0][0])->maxNumLevelLTD;
-				numBatchWriteSynapse = arrayHO->arrayColSize;
+				numBatchWriteSynapse = (int)ceil((double)arrayHO->arrayColSize / param->numWriteColMuxed);
 				#pragma omp parallel for reduction(+: sumArrayWriteEnergy, sumNeuroSimWriteEnergy)
 				for (int k = 0; k < param->nHide; k++) {
 					for (int j = 0; j < param->nOutput; j+=numBatchWriteSynapse) {

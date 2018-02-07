@@ -74,6 +74,7 @@ void NeuroSimSubArrayInitialize(SubArray *& subArray, Array *array, InputParamet
 	subArray->clkFreq = param->clkFreq;		// Clock frequency
 	subArray->numCellPerSynapse = array->numCellPerSynapse;	// # of cells per synapse
 	subArray->numColMuxed = param->numColMuxed;    // How many columns share 1 read circuit (for analog RRAM) or 1 S/A (for digital RRAM)
+	subArray->numWriteColMuxed = param->numWriteColMuxed;	// Time multiplexing during write operation
 	if (subArray->spikingMode == NONSPIKING && subArray->numReadPulse > 1) {
 		subArray->shiftAddEnable = true;	// Need to shift & add the partial weighted sum
 	} else {
@@ -138,7 +139,7 @@ void NeuroSimSubArrayInitialize(SubArray *& subArray, Array *array, InputParamet
 		cell.featureSize = 200e-9;
 	}
 
-	subArray->numWriteCellPerOperationNeuro = numCol;
+	subArray->numWriteCellPerOperationNeuro = (int)ceil((double)numCol / subArray->numWriteColMuxed);
 	
 	/* NeuroSim SubArray Initialization */
 	double unitLengthWireResistance = array->unitLengthWireResistance;

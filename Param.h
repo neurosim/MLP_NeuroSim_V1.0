@@ -72,6 +72,7 @@ public:
 	double BWthreshold; // The black and white threshold for numBitInput=1
 	double Hthreshold;	// The spiking threshold for the hidden layer (da1 in Train.cpp and Test.cpp)
 	int numColMuxed;	// How many columns share 1 read circuit (for analog RRAM) or 1 S/A (for digital RRAM)
+	int numWriteColMuxed;	// Time multiplexing during write operation
 	bool writeEnergyReport;	// Report write energy calculation or not
 	bool NeuroSimDynamicPerformance; // Report the dynamic performance (latency and energy) in NeuroSim or not
 	bool relaxArrayCellHeight;	// True: relax the array cell height to standard logic cell height in the synaptic array

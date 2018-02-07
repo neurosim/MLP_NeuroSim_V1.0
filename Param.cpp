@@ -69,6 +69,7 @@ Param::Param() {
 	BWthreshold = 0.5;	// The black and white threshold for numBitInput=1
 	Hthreshold = 0.5;	// The spiking threshold for the hidden layer (da1 in Train.cpp and Test.cpp)
 	numColMuxed = 16;	// How many columns share 1 read circuit (for analog RRAM) or 1 S/A (for digital RRAM)
+	numWriteColMuxed = 16;		// Time multiplexing during write operation
 	writeEnergyReport = true;	// Report write energy calculation or not
 	NeuroSimDynamicPerformance = true; // Report the dynamic performance (latency and energy) in NeuroSim or not
 	relaxArrayCellHeight = 0;	// True: relax the array cell height to standard logic cell height in the synaptic array
