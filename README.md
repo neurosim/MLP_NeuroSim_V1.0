@@ -1,4 +1,4 @@
-# MLP simlator (+NeuroSim)
+# MLP simlator (+NeuroSim) V1.0
 
 The MLP+NeuroSim framework was developed by [Prof. Shimeng Yu's group](http://faculty.engineering.asu.edu/shimengyu/) (Arizona State University). The model is made publicly available on a non-commercial basis. Copyright of the model is maintained by the developers, and the model is distributed under the terms of the [Creative Commons Attribution-NonCommercial 4.0 International Public License](http://creativecommons.org/licenses/by-nc/4.0/legalcode)
 
