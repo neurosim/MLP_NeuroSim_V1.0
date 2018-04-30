@@ -18,7 +18,7 @@ If you have logistic questions or comments on the model, please contact [Prof. S
 ## Installation steps (Linux)
 1. Get the tool from GitHub
 ```
-git clone https://github.com/neurosim/MLP_NeuroSim.git
+git clone https://github.com/neurosim/MLP_NeuroSim_V1.0.git
 ```
 
 2. Extract `MNIST_data.zip` to it’s current directory
