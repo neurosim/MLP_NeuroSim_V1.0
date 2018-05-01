@@ -2,7 +2,9 @@
 
 The MLP+NeuroSim framework was developed by [Prof. Shimeng Yu's group](http://faculty.engineering.asu.edu/shimengyu/) (Arizona State University). The model is made publicly available on a non-commercial basis. Copyright of the model is maintained by the developers, and the model is distributed under the terms of the [Creative Commons Attribution-NonCommercial 4.0 International Public License](http://creativecommons.org/licenses/by-nc/4.0/legalcode)
 
-This is the released version 1.0 (July 1st, 2017) for the tool. If you use the tool or adapt the tool in your work or publication, you are required to cite the following reference:
+This is the released version 1.0 (July 1st, 2017) for the tool, and this version only supports analog eNVM devices (RRAM or PCM). For other devices such as SRAM, digital eNVM (RRAM, PCM or STT-MRAM) and FeFET, please go to [MLP simulator (+NeuroSim) V2.0](https://github.com/neurosim/MLP_NeuroSim_V2.0) 
+
+If you use the tool or adapt the tool in your work or publication, you are required to cite the following reference:
 
 P.-Y. Chen, X. Peng, S. Yu, ※NeuroSim+: An integrated device-to-algorithm framework for benchmarking synaptic devices and array architectures,*§ IEEE International Electron Devices Meeting (IEDM)*, 2017, San Francisco, USA.
 
