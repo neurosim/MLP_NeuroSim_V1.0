@@ -6,7 +6,7 @@ This is the released version 1.0 (July 1st, 2017) for the tool, and this version
 
 P.-Y. Chen, X. Peng, S. Yu, ※NeuroSim+: An integrated device-to-algorithm framework for benchmarking synaptic devices and array architectures,*§ IEEE International Electron Devices Meeting (IEDM)*, 2017, San Francisco, USA.
 
-For more devices such as **_SRAM, digital eNVM (RRAM, PCM or STT-MRAM) and FeFET_**, please go to released **_version 2.0 (May 1st, 2018)_** [MLP simulator (+NeuroSim) V2.0](https://github.com/neurosim/MLP_NeuroSim_V2.0) 
+For more devices such as **_SRAM, digital eNVM (RRAM, PCM or STT-MRAM) and FeFET_**, please go to released **_version 2.0_** (May 1st, 2018) [MLP simulator (+NeuroSim) V2.0](https://github.com/neurosim/MLP_NeuroSim_V2.0) 
 
 If you have logistic questions or comments on the model, please contact [Prof. Shimeng Yu](mailto:shimengy@asu.edu), and if you have technical questions or comments, please contact [Pai-Yu Chen](mailto:pchen72@asu.edu) and [Xiaochen Peng](mailto:xpeng15@asu.edu).
 
