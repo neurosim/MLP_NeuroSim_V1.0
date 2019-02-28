@@ -8,7 +8,7 @@ P.-Y. Chen, X. Peng, S. Yu, ※NeuroSim+: An integrated device-to-algorithm fram
 
 For more devices such as **_SRAM, digital eNVM (RRAM, PCM or STT-MRAM) and FeFET_**, please go to released **_version 2.0_** (May 1st, 2018) [MLP simulator (+NeuroSim) V2.0](https://github.com/neurosim/MLP_NeuroSim_V2.0) 
 
-If you have logistic questions or comments on the model, please contact [Prof. Shimeng Yu](mailto:shimengy@asu.edu), and if you have technical questions or comments, please contact [Pai-Yu Chen](mailto:pchen72@asu.edu) and [Xiaochen Peng](mailto:xpeng15@asu.edu).
+If you have logistic questions or comments on the model, please contact [Prof. Shimeng Yu](mailto:shimeng.yu@ece.gatech.edu), and if you have technical questions or comments, please contact [Xiaochen Peng](mailto:xpeng76@gatech.edu) or [Yandong Luo](mailto:yluo310@gatech.edu).
 
 ## File lists
 1. MATLAB fitting script: `nonlinear_fit.m`
